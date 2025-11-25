@@ -1,5 +1,5 @@
 import './App.css'
-import MainComponent from "./components/MainComponent/mainComponent.tsx";
+
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Main from "./pages/Main/main.tsx";
 import AddCountry from "./pages/AddCountry/AddCountry.tsx";
