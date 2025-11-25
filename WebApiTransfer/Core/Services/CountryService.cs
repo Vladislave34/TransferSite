@@ -13,6 +13,7 @@ public class CountryService(AppDbTransferContext appDbTransferContext, IMapper m
     public async Task<List<CountryItemModel>> GetListAsync()
     {
         var list = await appDbTransferContext.Countries
+            .Where(c => c.IsDeleted == false)
             .ProjectTo<CountryItemModel>(mapper.ConfigurationProvider)
             .ToListAsync();
         return list;

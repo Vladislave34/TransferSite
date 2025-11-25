@@ -13,7 +13,8 @@ public class CountriesController(ICountryService countryService) : ControllerBas
     public async Task<ActionResult> GetCountry()
     {
         
-        var countries = await countryService.GetListAsync();
+        var countries = await countryService
+            .GetListAsync();
         return Ok(countries); // код 200
         
     }
@@ -23,6 +24,14 @@ public class CountriesController(ICountryService countryService) : ControllerBas
     {
         var item = await countryService.CreateAsync(model);
         return CreatedAtAction(null, item);
+    }
+    
+    [HttpDelete("Delete/{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await countryService.DeleteAsync(id);
+        return Ok();
+        
     }
 
     [HttpPut("Edit")]

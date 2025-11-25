@@ -1,11 +1,13 @@
 import type ICountry from "../../models/ICountry.ts";
 import type {FC} from "react";
+import { useNavigate} from "react-router-dom";
 
 interface CountryCardProps {
     Country: ICountry;
 }
 
 const CountryCard : FC<CountryCardProps>  = ({Country}) => {
+    const navigate = useNavigate();
     return (
         <div
             className="
@@ -47,15 +49,17 @@ const CountryCard : FC<CountryCardProps>  = ({Country}) => {
                 <div className="mt-auto flex justify-end">
                     <button
                         className="
-                    px-4 py-2
-                    rounded-xl
-                    font-medium
-                    bg-[#BDE0FE]
-                    hover:bg-[#A2D2FF]
-                    text-gray-900
-                    shadow-md
-                    transition-all duration-300
-                "
+                        cursor-pointer
+                        px-4 py-2
+                        rounded-xl
+                        font-medium
+                        bg-[#BDE0FE]
+                        hover:bg-[#A2D2FF]
+                        text-gray-900
+                        shadow-md
+                        transition-all duration-300
+                        "
+                        onClick={()=>navigate(`/Country/${Country.id}`, { state: { Country } })}
                     >
                         Details
                     </button>
