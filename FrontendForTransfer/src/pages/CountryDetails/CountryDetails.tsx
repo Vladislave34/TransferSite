@@ -1,5 +1,5 @@
 import {useLocation, useParams} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import DeleteCountryButton from "../../UI/DeleteCountryButton/DeleteCountryButton.tsx";
 import EditCountryButton from "../../UI/EditCountryButton/EditCountryButton.tsx";
 
@@ -7,6 +7,8 @@ import EditCountryButton from "../../UI/EditCountryButton/EditCountryButton.tsx"
 const CountryDetails = () => {
     const { id } = useParams();
     const {state} = useLocation();
+
+    const country = useMemo(() => state, [state]);
 
 
     useEffect(()=>{
@@ -16,7 +18,7 @@ const CountryDetails = () => {
     return (
         <div>
             <DeleteCountryButton id={Number(id)} />
-            <EditCountryButton id={Number(id)} country={state} />
+            <EditCountryButton id={Number(id)} country={country} />
         </div>
     );
 };

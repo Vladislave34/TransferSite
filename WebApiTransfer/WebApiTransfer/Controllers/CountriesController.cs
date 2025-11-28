@@ -10,13 +10,21 @@ namespace WebApiTransfer.Controllers;
 public class CountriesController(ICountryService countryService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult> GetCountry()
+    public async Task<ActionResult> GetCountries()
     {
         
         var countries = await countryService
             .GetListAsync();
         return Ok(countries); // код 200
         
+    }
+
+    [HttpGet("{id}")]
+
+    public async Task<ActionResult> GetCountry(int id)
+    {
+        var country = await countryService.GetByIdAsync(id);
+        return Ok(country);
     }
 
     [HttpPost("Create")]

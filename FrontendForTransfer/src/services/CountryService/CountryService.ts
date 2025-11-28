@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type ICountry from "../../models/ICountry.ts";
+import type ICountry from "../../models/Country/ICountry.ts";
 import API_ENV from "../../env";
-import type ICountryEditFormState from "../../models/ICountryEditFormState.ts";
+import type ICountryEditFormState from "../../models/Country/ICountryEditFormState.ts";
 
 
 export const countryApi = createApi({
@@ -35,7 +35,7 @@ export const countryApi = createApi({
         }),
         editCountry: build.mutation<ICountry, ICountryEditFormState>({
             query: (formData) => {
-                // Якщо у формі є image, створюємо FormData
+
                 const body = new FormData();
                 body.append("Id", formData.id.toString());
                 body.append("Name", formData.name);
@@ -43,7 +43,7 @@ export const countryApi = createApi({
                 body.append("Slug", formData.slug);
 
                 if (formData.image) {
-                    // Якщо image — це File
+
                     body.append("Image", formData.image as unknown as File);
                 }
 

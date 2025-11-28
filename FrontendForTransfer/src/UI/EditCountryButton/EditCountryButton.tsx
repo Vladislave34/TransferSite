@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import type {FC} from "react";
-import type ICountry from "../../models/ICountry.ts";
+import type ICountry from "../../models/Country/ICountry.ts";
 
 interface EditCountryButtonProps {
     id: number;

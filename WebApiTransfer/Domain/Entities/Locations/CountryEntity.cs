@@ -14,4 +14,6 @@ public class CountryEntity : BaseEntity<int>
     public string Slug { get; set; } = null!;
     
     public string image { get; set; }
+    
+    public ICollection<CityEntity> Cities { get; set; } = null!;
 }

@@ -19,6 +19,16 @@ public class CountryService(AppDbTransferContext appDbTransferContext, IMapper m
         return list;
     }
 
+    public async Task<CountryItemModel> GetByIdAsync(int id)
+    {
+        var item = await appDbTransferContext.Countries
+            .Where(c => c.IsDeleted == false && c.Id == id)
+            .ProjectTo<CountryItemModel>(mapper.ConfigurationProvider)
+            .SingleOrDefaultAsync();
+        if (item == null) throw new Exception("Country not found");
+        return item;
+    }
+
     public async Task<CountryItemModel> CreateAsync(CountryCreateModel model)
     {
         var entity = mapper.Map<CountryEntity>(model);
@@ -65,6 +75,7 @@ public class CountryService(AppDbTransferContext appDbTransferContext, IMapper m
 
         return mapper.Map<CountryItemModel>(entity);
     }
+    
     
 
    

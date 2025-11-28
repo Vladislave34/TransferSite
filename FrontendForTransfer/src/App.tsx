@@ -6,6 +6,7 @@ import AddCountry from "./pages/AddCountry/AddCountry.tsx";
 import CountryDetails from "./pages/CountryDetails/CountryDetails.tsx";
 
 import EditCountry from "./pages/EditCountry/EditCountry.tsx";
+import AddCity from "./pages/AddCity/AddCity.tsx";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/Country/:id" element={<CountryDetails />} />
                     <Route path="/EditCountry/:id" element={<EditCountry  />} />
                     <Route path="/AddCountry" element={<AddCountry />} />
+                    <Route path="/AddCity" element={<AddCity />} />
                     <Route path="*" element={<Navigate to="/Home" replace />}  />
                 </Routes>
             </BrowserRouter>

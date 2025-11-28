@@ -3,9 +3,9 @@ import {useNavigate,} from "react-router-dom";
 import {countryApi} from "../../services/CountryService/CountryService.ts";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import type ICountryEditFormState from "../../models/ICountryEditFormState.ts";
+import type ICountryEditFormState from "../../models/Country/ICountryEditFormState.ts";
 import type {FC} from "react";
-import type ICountry from "../../models/ICountry.ts";
+import type ICountry from "../../models/Country/ICountry.ts";
 
 interface ICountryEditFormProps {
     id: number;
