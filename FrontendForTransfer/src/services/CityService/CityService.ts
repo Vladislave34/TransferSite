@@ -2,6 +2,8 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import API_ENV from "../../env";
 
 import type ICity from "../../models/City/ICity.ts";
+import type ICityAddFormState from "../../models/City/ICityAddFormState.ts";
+import {serialize} from "object-to-formdata";
 
 
 
@@ -18,12 +20,17 @@ export const cityApi = createApi({
             }),
             providesTags : ["City"]
         }),
-        addCity: build.mutation<ICity, FormData>({
-            query: (values) => ({
+        addCity: build.mutation<ICity, ICityAddFormState>({
+            query: (model) => {
+                const formData = serialize(model)
+
+                return {
                     url: "Cities/Create",
                     method: "POST",
-                    body: values,
-                }),
+                    body: formData,
+                }
+
+                },
 
             invalidatesTags: ["City"]
         })

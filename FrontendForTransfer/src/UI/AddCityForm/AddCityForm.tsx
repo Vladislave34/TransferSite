@@ -3,13 +3,14 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import {countryApi} from "../../services/CountryService/CountryService.ts";
 import {cityApi} from "../../services/CityService/CityService.ts";
+import type ICityAddFormState from "../../models/City/ICityAddFormState.ts";
 
 
 
 const AddCityForm = () => {
     const [addCity] = cityApi.useAddCityMutation()
     const { data } = countryApi.useFetchAllCountriesQuery()
-    const formik = useFormik({
+    const formik = useFormik<ICityAddFormState>({
         initialValues: {
             name: "",
             description: "",
@@ -25,17 +26,12 @@ const AddCityForm = () => {
                 .moreThan(0, "ID країни має бути більшим за 0"),
             slug: Yup.string().required("Slug міста не може бути порожнім").max(100),
             description: Yup.string().nullable(),
-            image: Yup.mixed().required("Зображення обов'язкове"),
+
         }),
         onSubmit: (values) => {
-            const formData = new FormData();
-            formData.append("Name", values.name);
-            formData.append("Slug", values.slug);
-            formData.append("Description", values.description || '');
-            formData.append("CountryId", String(values.countryId));
-            if (values.image) formData.append("Image", values.image);
 
-            addCity(formData)
+
+            addCity(values)
                 .unwrap()
                 .then(() => alert("Місто створено!"))
                 .catch((err) => console.error(err));

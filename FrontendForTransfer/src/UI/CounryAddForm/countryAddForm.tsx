@@ -2,11 +2,12 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useNavigate} from "react-router-dom";
 import {countryApi} from "../../services/CountryService/CountryService.ts";
+import type ICountryCreateFormState from "../../models/Country/ICountryCreateFormState.ts";
 
 const CountryAddForm = () => {
     const navigate = useNavigate();
     const [addCountry] = countryApi.useAddCountryMutation();
-    const formik = useFormik({
+    const formik = useFormik<ICountryCreateFormState>({
         initialValues: {
             name: "",
             code: "",
@@ -30,16 +31,10 @@ const CountryAddForm = () => {
         }),
         onSubmit: async (values, { resetForm }) => {
 
-            const formData = new FormData();
-            formData.append("name", values.name);
-            formData.append("code", values.code);
-            formData.append("slug", values.slug);
-            if (values.image) {
-                formData.append("image", values.image); // File
-            }
+
 
             try {
-                await addCountry(formData).unwrap();
+                await addCountry(values).unwrap();
 
                 resetForm();
                 navigate('/');

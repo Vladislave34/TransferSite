@@ -1,7 +1,7 @@
 export default interface ICityAddFormState {
-    Name: string;
-    Slug: string;
-    Description?: string;
-    CountryId: number ;
-    Image?: File;
+    name: string;
+    slug: string;
+    description?: string;
+    countryId: number | string;
+    image?: File | null;
 }

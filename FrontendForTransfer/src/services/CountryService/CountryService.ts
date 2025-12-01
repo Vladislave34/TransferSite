@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type ICountry from "../../models/Country/ICountry.ts";
 import API_ENV from "../../env";
 import type ICountryEditFormState from "../../models/Country/ICountryEditFormState.ts";
+import type ICountryCreateFormState from "../../models/Country/ICountryCreateFormState.ts";
+import {serialize} from "object-to-formdata";
 
 
 export const countryApi = createApi({
@@ -18,12 +20,16 @@ export const countryApi = createApi({
             }),
             providesTags: ['Country'],
         }),
-        addCountry: build.mutation<ICountry, FormData>({
-            query: (formData) => ({
-                url: 'Countries/Create',
-                method: 'POST',
-                body: formData,
-            }),
+        addCountry: build.mutation<ICountry, ICountryCreateFormState>({
+            query: (model) => {
+                const body = serialize(model)
+                return{
+                    url: 'Countries/Create',
+                    method: 'POST',
+                    body: body,
+                }
+
+            },
             invalidatesTags: ['Country'], // після створення оновлюємо кеш fetchAllCountries
         }),
         deleteCountry: build.mutation<boolean, number>({
@@ -34,18 +40,11 @@ export const countryApi = createApi({
             invalidatesTags: ['Country']
         }),
         editCountry: build.mutation<ICountry, ICountryEditFormState>({
-            query: (formData) => {
+            query: (model) => {
 
-                const body = new FormData();
-                body.append("Id", formData.id.toString());
-                body.append("Name", formData.name);
-                body.append("Code", formData.code);
-                body.append("Slug", formData.slug);
+                const body = serialize(model)
 
-                if (formData.image) {
 
-                    body.append("Image", formData.image as unknown as File);
-                }
 
                 return {
                     url: 'Countries/Edit',

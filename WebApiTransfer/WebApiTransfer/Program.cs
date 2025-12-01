@@ -1,17 +1,49 @@
+using System.Text;
 using System.Text.Json;
 using Core.Interfaces;
 using Core.Services;
+using Core.Services.Identity.Google;
 using Domain;
+using Domain.Entities.Identity;
 using Domain.Entities.Locations;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using WebApiTransfer.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
+builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+    })
+    .AddEntityFrameworkStores<AppDbTransferContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddScoped<GoogleAuthService>();
+builder.Services
+    .AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+            ),
+            ValidateLifetime = true
+        };
+    });
 
 
 builder.Services.AddEndpointsApiExplorer();
