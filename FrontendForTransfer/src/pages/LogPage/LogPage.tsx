@@ -3,7 +3,7 @@ import LogButton from "../../UI/LogButton/LogButton.tsx";
 
 const LogPage = () => {
     return (
-        <div className="flex justify-center h-screen w-screen items-center">
+        <div className="h-screen w-screen bg-[#F6ECFA] flex justify-center items-cente">
             <LogButton />
         </div>
     );

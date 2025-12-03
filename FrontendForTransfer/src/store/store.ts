@@ -2,20 +2,21 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import {countryApi} from "../services/CountryService/CountryService.ts";
 import {cityApi} from "../services/CityService/CityService.ts";
 import {googleApi} from "../services/GoogleAuthServise/GoogleAuthServise.ts";
+import {authApi} from "../services/AuthService/AuthService.ts";
 
 const rootReducer = combineReducers({
 
     [countryApi.reducerPath]: countryApi.reducer,
     [cityApi.reducerPath]: cityApi.reducer,
     [googleApi.reducerPath]: googleApi.reducer,
-
+    [authApi.reducerPath]: authApi.reducer,
 });
 
 export const setupStore = () => {
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(countryApi.middleware, cityApi.middleware, googleApi.middleware),
+            getDefaultMiddleware().concat(countryApi.middleware, cityApi.middleware, googleApi.middleware, authApi.middleware),
 
     });
 };

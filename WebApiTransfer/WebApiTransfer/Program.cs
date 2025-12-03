@@ -1,17 +1,21 @@
 using System.Text;
 using System.Text.Json;
 using Core.Interfaces;
+using Core.Models.Edentity.Account;
 using Core.Services;
+using Core.Services.Identity;
 using Core.Services.Identity.Google;
 using Domain;
 using Domain.Entities.Identity;
 using Domain.Entities.Locations;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using WebApiTransfer.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,24 +31,59 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
     .AddEntityFrameworkStores<AppDbTransferContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<GoogleAuthService>();
-builder.Services
-    .AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", opt =>
+builder.Services.AddAuthentication(options =>
     {
-        opt.TokenValidationParameters = new TokenValidationParameters
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-            ),
-            ValidateLifetime = true
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+var assemblyName = typeof(LoginModel).Assembly.GetName().Name;
 
+builder.Services.AddSwaggerGen(opt =>
+{
+    var fileDoc = $"{assemblyName}.xml";
+    var filePath = Path.Combine(AppContext.BaseDirectory, fileDoc);
+    opt.IncludeXmlComments(filePath);
+
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -55,6 +94,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICountryService, CountryService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
@@ -71,6 +111,8 @@ app.UseCors(policy =>
         .AllowAnyMethod()
         .AllowAnyHeader());
 
+
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -85,41 +127,47 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(path),
     RequestPath = $"/{dirImageName}"
 });
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 
 
 app.MapControllers();
 
+ 
 using (var scoped = app.Services.CreateScope())
 {
-    var db = scoped.ServiceProvider.GetRequiredService<AppDbTransferContext>();
-
-    if (!db.Countries.Any())
+    var myAppDbContext = scoped.ServiceProvider.GetRequiredService<AppDbTransferContext>();
+    var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
+    myAppDbContext.Database.Migrate(); 
+    var roles = new[] { "User", "Admin" };
+    foreach (var role in roles)
     {
-        var jsonPath = Path.Combine(
-            app.Environment.ContentRootPath,
-            "..",
-            "Domain",
-            "countries.json"
-        );
-
-        jsonPath = Path.GetFullPath(jsonPath);
-
-        var json = await File.ReadAllTextAsync(jsonPath);
-
-        var countries = JsonSerializer.Deserialize<List<CountryEntity>>(
-            json,
-            new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-        db.Countries.AddRange(countries);
-        await db.SaveChangesAsync();
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new RoleEntity { Name = role });
+        }
+    }
+    if (!myAppDbContext.Users.Any())
+    {
+        var userManager = scoped.ServiceProvider
+            .GetRequiredService<UserManager<UserEntity>>();
+        var adminUser = new UserEntity
+        {
+            UserName = "admin@gmail.com",
+            Email = "admin@gmail.com",
+            FirstName = "System",
+            LastName = "Administrator",
+            Image = "default.jpg"
+        };
+        var result = await userManager.CreateAsync(adminUser, "Admin123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
     }
 }
+
 
 
 app.Run();

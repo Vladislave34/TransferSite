@@ -8,6 +8,8 @@ import CountryDetails from "./pages/CountryDetails/CountryDetails.tsx";
 import EditCountry from "./pages/EditCountry/EditCountry.tsx";
 import AddCity from "./pages/AddCity/AddCity.tsx";
 import LogPage from "./pages/LogPage/LogPage.tsx";
+import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
                     <Route path="/AddCountry" element={<AddCountry />} />
                     <Route path="/AddCity" element={<AddCity />} />
                     <Route path="/Log" element={<LogPage />} />
+                    <Route path="/Register" element={<RegisterPage />} />
+                    <Route path="/Login" element={<LoginPage />} />
                     <Route path="*" element={<Navigate to="/Home" replace />}  />
                 </Routes>
             </BrowserRouter>
