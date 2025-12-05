@@ -10,6 +10,7 @@ import AddCity from "./pages/AddCity/AddCity.tsx";
 import LogPage from "./pages/LogPage/LogPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import Profile from "./pages/Profile/Profile.tsx";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/Log" element={<LogPage />} />
                     <Route path="/Register" element={<RegisterPage />} />
                     <Route path="/Login" element={<LoginPage />} />
+                    <Route path="/Profile" element={<Profile />} />
                     <Route path="*" element={<Navigate to="/Home" replace />}  />
                 </Routes>
             </BrowserRouter>

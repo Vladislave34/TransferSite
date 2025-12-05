@@ -1,6 +1,7 @@
 using Core.Interfaces;
 using Core.Models.Edentity.Account;
 using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace WebApiTransfer.Controllers;
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class AccountController(UserManager<UserEntity> userManager,
-    IJwtTokenService jwtTokenService, IImageService imageService, RoleManager<RoleEntity> roleManager) : ControllerBase
+    IJwtTokenService jwtTokenService, IUserService userService, IImageService imageService, RoleManager<RoleEntity> roleManager) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
@@ -61,5 +62,13 @@ public class AccountController(UserManager<UserEntity> userManager,
         
         return Ok(new { token });
 
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult> GetProfile()
+    {
+        var profile = await userService.GetUserProfileAsync();
+        return Ok(profile);
     }
 }

@@ -4,11 +4,18 @@ import {useFormik} from "formik";
 
 import * as Yup from "yup";
 import type IUserLogin from "../../models/User/IUserLogin.ts";
+import {useEffect} from "react";
 
 
 const LoginForm = () => {
+
     const [login] = authApi.useLoginMutation();
     const navigate = useNavigate();
+    useEffect(() => {
+        if(localStorage.getItem("token")){
+            navigate('/Profile');
+        }
+    }, []);
     const formik = useFormik<IUserLogin>({
         initialValues: {
             email: "",
@@ -25,7 +32,7 @@ const LoginForm = () => {
             const jwt = await login(values)
                 .unwrap();
             localStorage.setItem("token", jwt.token);
-            navigate('/');
+            navigate('/Profile');
 
 
 

@@ -3,6 +3,7 @@ import {countryApi} from "../services/CountryService/CountryService.ts";
 import {cityApi} from "../services/CityService/CityService.ts";
 import {googleApi} from "../services/GoogleAuthServise/GoogleAuthServise.ts";
 import {authApi} from "../services/AuthService/AuthService.ts";
+import {authorizedUserApi} from "../services/AuthorizedUser/AuthorizedUserService.ts";
 
 const rootReducer = combineReducers({
 
@@ -10,13 +11,14 @@ const rootReducer = combineReducers({
     [cityApi.reducerPath]: cityApi.reducer,
     [googleApi.reducerPath]: googleApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
+    [authorizedUserApi.reducerPath]: authorizedUserApi.reducer,
 });
 
 export const setupStore = () => {
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(countryApi.middleware, cityApi.middleware, googleApi.middleware, authApi.middleware),
+            getDefaultMiddleware().concat(countryApi.middleware, cityApi.middleware, googleApi.middleware, authApi.middleware, authorizedUserApi.middleware),
 
     });
 };
