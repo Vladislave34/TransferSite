@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WebApiTransfer.DataSeeder;
 using WebApiTransfer.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,7 +99,7 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<DbContextSeeder>();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -144,6 +145,7 @@ using (var scoped = app.Services.CreateScope())
 {
     var myAppDbContext = scoped.ServiceProvider.GetRequiredService<AppDbTransferContext>();
     var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
+    var seeder = scoped.ServiceProvider.GetRequiredService<DbContextSeeder>();
     myAppDbContext.Database.Migrate(); 
     var roles = new[] { "User", "Admin" };
     foreach (var role in roles)
@@ -171,6 +173,7 @@ using (var scoped = app.Services.CreateScope())
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
+    await seeder.SeedAsync();
 }
 
 

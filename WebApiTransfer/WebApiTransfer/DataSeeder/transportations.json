@@ -1,0 +1,24 @@
+[
+  {
+    "Id": 1,
+    "Code": "PS101",
+    "FromCityId": 1,
+    "ToCityId": 2,
+    "DepartureTime": "2025-01-15T08:00:00Z",
+    "ArrivalTime":  "2025-01-15T08:00:00Z",
+    "SeatsTotal": 50,
+    "SeatsAvailable": 12,
+    "StatusId": 1
+  },
+  {
+    "Id": 2,
+    "Code": "PS505",
+    "FromCityId": 2,
+    "ToCityId": 1,
+    "DepartureTime": "2025-01-15T08:00:00Z",
+    "ArrivalTime":  "2025-01-15T08:00:00Z",
+    "SeatsTotal": 50,
+    "SeatsAvailable": 0,
+    "StatusId": 5
+  }
+]

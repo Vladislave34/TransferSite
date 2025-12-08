@@ -1,0 +1,18 @@
+[
+  {
+    "Id": 1,
+    "Name": "Київ",
+    "Slug": "kyiv",
+    "Image": "https://portalhistoryua.com/wp-content/uploads/2024/05/majdan-nezalezhnosti-v-kyyevi-glib-albovskyj-unsplash-1024x640.jpg",
+    "Description": "Столиця України",
+    "CountryId": 14
+  },
+  {
+    "Id": 2,
+    "Name": "Львів",
+    "Slug": "lviv",
+    "Image": "https://eventukraine.com/ev/wp-content/uploads/2019/09/Depositphotos_14017349_s-2019.jpg",
+    "Description": "Культурний центр",
+    "CountryId": 14
+  }
+]

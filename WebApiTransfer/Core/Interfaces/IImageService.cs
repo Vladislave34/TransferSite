@@ -10,5 +10,7 @@ public interface IImageService
     
     public Task<string> UpdateImageAsync(IFormFile file, string? oldFileName);
     
+    
+    Task<string> UploadImageFromUrlAsync(string imageUrl);
 
 }

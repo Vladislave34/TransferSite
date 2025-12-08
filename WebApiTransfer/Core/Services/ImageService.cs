@@ -37,6 +37,40 @@ public class ImageService(IConfiguration configuration):IImageService
             return String.Empty;
         }
     }
+    public async Task<string> UploadImageFromUrlAsync(string imageUrl)
+    {
+        try
+        {
+            using var httpClient = new HttpClient();
+            var bytes = await httpClient.GetByteArrayAsync(imageUrl);
+
+            using var image = Image.Load(bytes);
+
+            image.Mutate(imgc =>
+            {
+                imgc.Resize(new ResizeOptions
+                {
+                    Size = new Size(600, 600),
+                    Mode = ResizeMode.Max
+                });
+            });
+
+            var fileName = Path.GetRandomFileName() + ".webp";
+
+            var dirImageName = configuration["DirImageName"] ?? "images";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), dirImageName, fileName);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+
+            await image.SaveAsync(path, new WebpEncoder());
+
+            return fileName;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
     public async Task<bool> DeleteImageAsync(string fileName)
     {
         try
