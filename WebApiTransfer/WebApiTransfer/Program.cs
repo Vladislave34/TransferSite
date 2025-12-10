@@ -100,6 +100,7 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<DbContextSeeder>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -110,12 +111,22 @@ builder.Services.AddMvc(options =>
 {
     options.Filters.Add<ValidationFilter>();
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowTwoDomains", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", 
+                "https://domain2.com")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // якщо потрібно передавати cookies/token
+    });
+});
+
 var app = builder.Build();
 
-app.UseCors(policy =>
-    policy.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
+app.UseCors("AllowTwoDomains");
 
 
 
@@ -146,6 +157,7 @@ using (var scoped = app.Services.CreateScope())
     var myAppDbContext = scoped.ServiceProvider.GetRequiredService<AppDbTransferContext>();
     var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
     var seeder = scoped.ServiceProvider.GetRequiredService<DbContextSeeder>();
+    var sender = scoped.ServiceProvider.GetRequiredService<IEmailSender>();
     myAppDbContext.Database.Migrate(); 
     var roles = new[] { "User", "Admin" };
     foreach (var role in roles)
@@ -162,7 +174,7 @@ using (var scoped = app.Services.CreateScope())
         var adminUser = new UserEntity
         {
             UserName = "admin@gmail.com",
-            Email = "admin@gmail.com",
+            Email = "ostapchuk_vladyslav@gymnasia21.lutsk.ua",
             FirstName = "System",
             LastName = "Administrator",
             Image = "default.jpg"
@@ -174,6 +186,7 @@ using (var scoped = app.Services.CreateScope())
         }
     }
     await seeder.SeedAsync();
+    sender.SendEmailAsync("ostapchuk_vladyslav@gymnasia21.lutsk.ua", "Important", "Site start to work");
 }
 
 

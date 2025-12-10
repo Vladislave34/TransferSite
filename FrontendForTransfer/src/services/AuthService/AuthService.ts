@@ -9,6 +9,7 @@ export const authApi  = createApi({
     reducerPath: "authApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${API_ENV.API_BASE_URL}/api/Account/`,
+
     }),
     tagTypes: ['Auth'],
     endpoints: (build) => ({

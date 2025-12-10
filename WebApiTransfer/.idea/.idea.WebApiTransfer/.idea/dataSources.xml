@@ -9,5 +9,13 @@
       <jdbc-url>jdbc:postgresql://ep-proud-lake-ag7hg9ct-pooler.c-2.eu-central-1.aws.neon.tech/neondb?user=neondb_owner&amp;password=npg_uxAsSG2lDN7d&amp;sslmode=require&amp;channelBinding=require</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="neondb@ep-wild-bush-agfjn35y-pooler.c-2.eu-central-1.aws.neon.tech" uuid="779ee01f-9e29-4f4b-aa26-020e33d16d34">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ep-wild-bush-agfjn35y-pooler.c-2.eu-central-1.aws.neon.tech/neondb?user=neondb_owner&amp;password=npg_vYHKmeSIMd16&amp;sslmode=require&amp;channelBinding=require</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

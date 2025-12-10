@@ -14,6 +14,7 @@ public class DbContextSeeder(AppDbTransferContext _context, IImageService imageS
     }
     public async Task SeedAsync()
     {
+        await SeedCountries();
         await SeedStatuses();
         await SeedCities();
         await SeedTransportations();
@@ -53,6 +54,25 @@ public class DbContextSeeder(AppDbTransferContext _context, IImageService imageS
         }
 
         await _context.Cities.AddRangeAsync(items);
+        await _context.SaveChangesAsync();
+    }
+    private async Task SeedCountries()
+    {
+        if (_context.Countries.Any())
+            return;
+        
+        var filePath = GetSeedFile("countries.json");
+        var json = await File.ReadAllTextAsync(filePath);
+
+        var items = JsonSerializer.Deserialize<List<CountryEntity>>(json)!;
+
+        foreach (var item in items)
+        {
+            
+            item.image = await imageService.UploadImageFromUrlAsync(item.image);
+        }
+
+        await _context.Countries.AddRangeAsync(items);
         await _context.SaveChangesAsync();
     }
 

@@ -1,6 +1,7 @@
 import type ICountry from "../../models/Country/ICountry.ts";
 import type {FC} from "react";
 import { useNavigate} from "react-router-dom";
+import API_ENV from "../../env";
 
 interface CountryCardProps {
     Country: ICountry;
@@ -27,7 +28,7 @@ const CountryCard : FC<CountryCardProps>  = ({Country}) => {
         >
             <figure className="overflow-hidden h-48">
                 <img
-                    src={`http://localhost:5125/images/${Country.image}`}
+                    src={`${API_ENV.API_BASE_URL}/images/${Country.image}`}
                     alt={Country.name}
                     className="
                 w-full h-full object-cover

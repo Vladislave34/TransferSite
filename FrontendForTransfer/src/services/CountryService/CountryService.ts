@@ -9,8 +9,16 @@ import {serialize} from "object-to-formdata";
 export const countryApi = createApi({
     reducerPath: 'countryAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${API_ENV.API_BASE_URL}/api/`
+        baseUrl: `${API_ENV.API_BASE_URL}/api/`,
+        prepareHeaders: (headers) => {
+            const token = localStorage.getItem("token");
 
+            if (token) {
+                headers.set("Authorization", `Bearer ${token}`);
+            }
+
+            return headers;
+        }
     }),
     tagTypes: ['Country'],
     endpoints: (build) => ({
