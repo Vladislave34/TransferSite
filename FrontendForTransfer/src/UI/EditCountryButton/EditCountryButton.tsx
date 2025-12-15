@@ -22,8 +22,8 @@ const EditCountryButton:FC<EditCountryButtonProps> = ({id, country}) => {
                         text-gray-900
                         shadow-md
                         transition-all duration-300"
-                    onClick={()=>{
-
+                    onClick={(e)=>{
+                        e.stopPropagation();
                         navigate(`/EditCountry/${id}`, {state: country})
                     }}
 

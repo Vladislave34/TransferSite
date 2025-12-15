@@ -117,7 +117,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowTwoDomains", policy =>
     {
         policy.WithOrigins("http://localhost:5173", 
-                "https://domain2.com")
+                "http://mytransfersite12345.somee.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials(); // якщо потрібно передавати cookies/token

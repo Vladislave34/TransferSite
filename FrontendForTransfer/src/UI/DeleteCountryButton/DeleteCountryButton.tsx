@@ -22,7 +22,8 @@ const DeleteCountryButton:FC<DeleteCountryButtonProps> = ({ id } ) => {
                         text-gray-900
                         shadow-md
                         transition-all duration-300"
-                    onClick={()=>{
+                    onClick={(e)=>{
+                        e.stopPropagation()
                         deleteCountry(id);
                         navigate("/Home")
                     }}

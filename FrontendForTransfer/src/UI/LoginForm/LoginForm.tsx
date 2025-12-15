@@ -6,8 +6,12 @@ import * as Yup from "yup";
 import type IUserLogin from "../../models/User/IUserLogin.ts";
 import {useEffect} from "react";
 
+import {useAppDispatch} from "../../hooks/redux.ts";
+import {loginSuccess} from "../../store/reducers/authSlice.ts";
+
 
 const LoginForm = () => {
+    const dispatch = useAppDispatch();
 
     const [login] = authApi.useLoginMutation();
     const navigate = useNavigate();
@@ -31,7 +35,8 @@ const LoginForm = () => {
 
             const jwt = await login(values)
                 .unwrap();
-            localStorage.setItem("token", jwt.token);
+            dispatch(loginSuccess(jwt.token));
+
             navigate('/Profile');
 
 

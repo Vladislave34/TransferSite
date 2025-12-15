@@ -4,7 +4,9 @@ import ProfileCard from "../../UI/ProfileCard/ProfileCard.tsx";
 
 
 const Profile = () => {
-    const { data, isLoading, } = authorizedUserApi.useGetUserQuery();
+    const { data, isLoading, } = authorizedUserApi.useGetUserQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
 
 
 
