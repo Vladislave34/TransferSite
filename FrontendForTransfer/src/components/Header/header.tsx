@@ -1,223 +1,166 @@
-import type { FC } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {type FC, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import API_ENV from "../../env";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { logout } from "../../store/reducers/authSlice";
-import { CgProfile } from "react-icons/cg";
-import {RiUserSettingsLine} from "react-icons/ri";
-import {FaPlus} from "react-icons/fa";
-import {FiLogOut, FiPlusCircle} from "react-icons/fi";
+import API_ENV from "../../env";
+
+
+
+import {
+    CgProfile
+} from "react-icons/cg";
+import {
+    FiLogOut,
+    FiPlusCircle
+} from "react-icons/fi";
+import { RiUserSettingsLine } from "react-icons/ri";
+import {ThemeToggleButton} from "../../admin/components/common/ThemeToggleButton.tsx";
+import NotificationDropdown from "../../admin/components/header/NotificationDropdown.tsx";
+
 const Header: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const user = useAppSelector(state => state.authReducer.user);
-
-    const [open, setOpen] = useState(false);
-
-    const linkClass = ({ isActive }: { isActive: boolean }) =>
-        `
-    px-4 py-2
-    rounded-xl
-    font-medium
-    shadow-md
-    transition-all duration-300
-    ${
-            isActive
-                ? "bg-[#BDE0FE] text-gray-900"
-                : "bg-white/40 hover:bg-white/60 text-gray-900"
-        }
-  `;
-
-    const handleLogout = () => {
-        dispatch(logout());
-        setOpen(false);
-        navigate("/");
-    };
+    const user = useAppSelector((s) => s.authReducer.user);
 
 
+    const [isUserOpen, setUserOpen] = useState(false);
 
-    // Чи користувач є Admin
-    // safe check
     const isAdmin =
         user?.role &&
         (
             (Array.isArray(user.role) && user.role.includes("Admin")) ||
-            (typeof user.role === "string" && user.role === "Admin")
+            user.role === "Admin"
         );
 
+    const handleLogout = () => {
+        dispatch(logout());
+        setUserOpen(false);
+        navigate("/");
+    };
+
     return (
-        <header
-            className="
-        w-full mb-8
-        rounded-3xl shadow-lg
-        bg-gradient-to-r
-        from-[#CDB4DB] via-[#FFC8DD] to-[#A2D2FF]
-        border border-white/20
-        px-6 py-4
-        flex items-center justify-between
-      "
-        >
-            {/* Left */}
-            <div className="cursor-pointer" onClick={() => navigate("/")}>
-                <h1 className="text-2xl font-bold text-gray-900 drop-shadow">
-                    🌍 Countries App
-                </h1>
-                <p className="text-xs uppercase tracking-wide opacity-80">
-                    Explore the world
-                </p>
-            </div>
+        <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-800">
+            <div className="flex items-center justify-between px-4 py-3 lg:px-6">
+                {/* Left */}
+                <Link to="/" className="flex items-center gap-2">
+          <span className="text-xl font-bold text-gray-900 dark:text-white">
+            🌍 Countries App
+          </span>
+                </Link>
 
-            {/* Center */}
-            <nav className="flex gap-3">
-                <NavLink to="/" className={linkClass}>
-                    Home
-                </NavLink>
-            </nav>
+                {/* Right */}
+                <div className="flex items-center gap-3">
+                    <ThemeToggleButton />
+                    <NotificationDropdown />
 
-            {/* Right */}
-            <div className="relative">
-                {user ? (
-                    <>
-                        {/* User button */}
-                        <div
-                            className="
-                flex items-center gap-3
-                cursor-pointer
-                px-3 py-2
-                rounded-2xl
-                bg-white/40 hover:bg-white/60
-                transition-all duration-300
-                shadow-md
-              "
-                            onClick={() => setOpen(prev => !prev)}
-                        >
-                            <img
-                                src={`${API_ENV.API_BASE_URL}/images/${user.image}`}
-                                alt={user.name}
-                                className="w-10 h-10 rounded-full object-cover border border-white/50"
-                            />
-                            <p className="text-sm font-semibold text-gray-900">
-                                {user.name}
-                            </p>
-                        </div>
-
-                        {/* Dropdown */}
-                        {open && (
-                            <div
-                                className="
-                  absolute right-0 mt-3
-                  w-56
-                  rounded-2xl
-                  shadow-xl
-                  bg-gradient-to-b
-                  from-[#CDB4DB]
-                  via-[#FFC8DD]
-                  to-[#A2D2FF]
-                  border border-white/30
-                  overflow-hidden
-                  z-50
-                "
+                    {/* User */}
+                    {user ? (
+                        <div className="relative">
+                            <button
+                                onClick={() => setUserOpen(!isUserOpen)}
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
-                                <div className="flex flex-row items-center gap-2 hover:bg-white/30 transition">
-                                    <CgProfile size={24} className="ml-4" />
+                                <img
+                                    src={`${API_ENV.API_BASE_URL}/images/${user.image}`}
+                                    alt={user.name}
+                                    className="w-9 h-9 rounded-full object-cover"
+                                />
+                                <span className="hidden text-sm font-medium text-gray-700 lg:block dark:text-gray-300">
+                  {user.name}
+                </span>
+                            </button>
 
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setOpen(false);
-                                            navigate("/Profile");
-                                        }}
-                                        className="text-left px-4 py-3 font-medium "
-                                    >
-                                        Profile
-                                    </button>
+                            {/* Dropdown */}
+                            {isUserOpen && (
+                                <div className="absolute right-0 mt-3 w-56 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg overflow-hidden">
+                                    <MenuItem
+                                        icon={<CgProfile size={18} />}
+                                        text="Profile"
+                                        onClick={() => navigate("/Profile")}
+                                    />
+
+                                    {isAdmin && (
+                                        <>
+                                            <MenuItem
+                                                icon={<RiUserSettingsLine size={18} />}
+                                                text="Admin Panel"
+                                                onClick={() => navigate("/admin")}
+                                            />
+                                            <MenuItem
+                                                icon={<FiPlusCircle size={18} />}
+                                                text="Add City"
+                                                onClick={() => navigate("/AddCity")}
+                                            />
+                                            <MenuItem
+                                                icon={<FiPlusCircle size={18} />}
+                                                text="Add Country"
+                                                onClick={() => navigate("/AddCountry")}
+                                            />
+                                            <Divider />
+                                        </>
+                                    )}
+
+                                    <MenuItem
+                                        icon={<FiLogOut size={18} />}
+                                        text="Logout"
+                                        onClick={handleLogout}
+                                        danger
+                                    />
                                 </div>
-
-                                {/* Пункти для Admin */}
-                                {isAdmin && (
-                                    <>
-                                        <div className="flex flex-row items-center gap-2 hover:bg-white/30 transition">
-
-                                            <RiUserSettingsLine  size={24} className="ml-4" />
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setOpen(false);
-                                                    navigate("/AdminPage");
-                                                }}
-                                                className="text-left px-4 py-3 font-medium "
-                                            >
-                                                Admin Page
-                                            </button>
-                                        </div>
-                                        <div className="flex flex-row items-center gap-2 hover:bg-white/30 transition">
-
-                                            <FiPlusCircle  size={24} className="ml-4" />
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setOpen(false);
-                                                    navigate("/AddCity");
-                                                }}
-                                                className="text-left px-4 py-3 font-medium "
-                                            >
-                                                Add City
-                                            </button>
-                                        </div>
-
-
-
-                                        <div className="flex flex-row items-center gap-2 hover:bg-white/30 transition">
-
-                                            <FiPlusCircle  size={24} className="ml-4" />
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setOpen(false);
-                                                    navigate("/AddCountry");
-                                                }}
-                                                className="text-left px-4 py-3 font-medium "
-                                            >
-                                                Add Country
-                                            </button>
-                                        </div>
-
-                                        <div className="h-px bg-white/40 " />
-                                    </>
-                                )}
-
-                                {/* Logout для всіх */}
-                                <div className="flex flex-row items-center gap-2 hover:bg-white/30 transition">
-
-                                    <FiLogOut  size={24} className="ml-4" />
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleLogout()
-                                        }}
-                                        className="text-left px-4 py-3 font-medium "
-                                    >
-                                        Logout
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </>
-                ) : (
-                    <div className="flex gap-3">
-                        <NavLink to="/Login" className={linkClass}>
-                            Login
-                        </NavLink>
-                        <NavLink to="/Register" className={linkClass}>
-                            Register
-                        </NavLink>
-                    </div>
-                )}
+                            )}
+                        </div>
+                    ) : (
+                        <>
+                            <Link
+                                to="/Login"
+                                className="px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                to="/Register"
+                                className="px-4 py-2 text-sm font-medium text-white rounded-lg bg-brand-500 hover:bg-brand-600"
+                            >
+                                Register
+                            </Link>
+                        </>
+                    )}
+                </div>
             </div>
         </header>
     );
 };
 
 export default Header;
+
+/* ------------------------------------------------------------------ */
+/* Components */
+
+const MenuItem = ({
+                      icon,
+                      text,
+                      onClick,
+                      danger,
+                  }: {
+    icon: React.ReactNode;
+    text: string;
+    onClick: () => void;
+    danger?: boolean;
+}) => (
+    <button
+        onClick={onClick}
+        className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition
+      ${danger
+            ? "text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"}
+    `}
+    >
+        {icon}
+        {text}
+    </button>
+);
+
+const Divider = () => (
+    <div className="h-px bg-gray-200 dark:bg-gray-800" />
+);

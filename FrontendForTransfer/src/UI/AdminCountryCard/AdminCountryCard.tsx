@@ -1,5 +1,5 @@
 import type ICountry from "../../models/Country/ICountry.ts";
-import type {FC} from "react";
+import {type FC, } from "react";
 import { useNavigate} from "react-router-dom";
 import API_ENV from "../../env";
 import DeleteCountryButton from "../DeleteCountryButton/DeleteCountryButton.tsx";
@@ -15,20 +15,21 @@ const CountryCard : FC<CountryCardProps>  = ({Country}) => {
     const navigate = useNavigate();
     return (
         <div
-            className="
-    max-w-sm w-full
-    h-[360px]
-    flex flex-col
-    overflow-hidden
-    rounded-3xl
-    shadow-lg hover:shadow-xl
-    transition-all duration-300
-    bg-gradient-to-b
-    from-[#CDB4DB]
-    via-[#FFC8DD]
-    to-[#A2D2FF]
-    border border-white/20
-    "
+            className={`
+       
+        max-w-sm w-full
+        h-[360px]
+        flex flex-col
+        overflow-hidden
+        rounded-3xl
+        shadow-lg hover:shadow-xl
+        transition-all duration-300
+        bg-gradient-to-b
+        from-[#CDB4DB]
+        via-[#FFC8DD]
+        to-[#A2D2FF]
+        border border-white/20
+    `}
             onClick={()=>{
                 navigate(`/Country/${Country.id}`, { state: { Country } })
             }}

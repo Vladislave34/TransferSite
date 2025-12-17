@@ -1,6 +1,7 @@
 import CountryEditForm from "../../UI/CountryEditForm/countryEditForm.tsx";
 import {useLocation, useParams} from "react-router-dom";
 import { useMemo} from "react";
+import AuthLayout from "../../admin/pages/AuthPages/AuthPageLayout.tsx";
 
 
 
@@ -12,9 +13,9 @@ const EditCountry = () => {
 
 
     return (
-        <div className="h-screen w-screen bg-[#F6ECFA] flex justify-center items-center">
-            <CountryEditForm id={Number(id)} country={country} />
-        </div>
+        <AuthLayout><CountryEditForm id={Number(id)} country={country} /></AuthLayout>
+
+
     );
 };
 

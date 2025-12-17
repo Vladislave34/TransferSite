@@ -1,5 +1,5 @@
 import type ICountry from "../../models/Country/ICountry.ts";
-import type {FC} from "react";
+import {type FC, } from "react";
 import { useNavigate} from "react-router-dom";
 import API_ENV from "../../env";
 
@@ -9,9 +9,11 @@ interface CountryCardProps {
 
 const CountryCard : FC<CountryCardProps>  = ({Country}) => {
     const navigate = useNavigate();
+
     return (
         <div
-            className="
+            className={`
+       
         max-w-sm w-full
         h-[360px]
         flex flex-col
@@ -24,7 +26,7 @@ const CountryCard : FC<CountryCardProps>  = ({Country}) => {
         via-[#FFC8DD]
         to-[#A2D2FF]
         border border-white/20
-    "
+    `}
         >
             <figure className="overflow-hidden h-48">
                 <img

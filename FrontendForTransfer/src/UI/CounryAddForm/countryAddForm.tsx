@@ -1,12 +1,19 @@
-import {useFormik} from "formik";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import {useNavigate} from "react-router-dom";
-import {countryApi} from "../../services/CountryService/CountryService.ts";
+import { countryApi } from "../../services/CountryService/CountryService.ts";
 import type ICountryCreateFormState from "../../models/Country/ICountryCreateFormState.ts";
+import Label from "../../admin/components/form/Label";
+import Input from "../../admin/components/form/input/InputField";
+import Button from "../../admin/components/ui/button/Button";
+import Checkbox from "../../admin/components/form/input/Checkbox";
 
 const CountryAddForm = () => {
     const navigate = useNavigate();
     const [addCountry] = countryApi.useAddCountryMutation();
+    const [isChecked, setIsChecked] = useState(false);
+
     const formik = useFormik<ICountryCreateFormState>({
         initialValues: {
             name: "",
@@ -19,157 +26,124 @@ const CountryAddForm = () => {
                 .min(3, "Name має містити мінімум 3 символи")
                 .required("Name обов'язкове"),
             code: Yup.string()
-                .matches(/^[a-z]{2,3}$/, "Code має містити 2-3 великі латинські літери")
+                .matches(/^[a-z]{1,3}$/, "Code має містити 1-3 великі латинські літери")
                 .required("Code обов'язковий"),
             slug: Yup.string()
-                .matches(
-                    /^[a-z0-9-]+$/,
-                    "Slug може містити лише латинські букви, цифри та дефіс"
-                )
+                .matches(/^[a-z0-9-]+$/, "Slug може містити лише латинські букви, цифри та дефіс")
                 .required("Slug обов'язковий"),
-
         }),
         onSubmit: async (values, { resetForm }) => {
-
-
-
             try {
                 await addCountry(values).unwrap();
-
                 resetForm();
-                navigate('/');
+                navigate("/");
             } catch (err) {
                 console.error(err);
             }
-
-
-
         },
     });
 
     return (
-        <form
-            onSubmit={formik.handleSubmit}
-            className="
-                max-w-sm w-full
-                h-[500px]
-                flex flex-col
-                overflow-hidden
-                rounded-3xl
-                shadow-lg hover:shadow-xl
-                transition-all duration-300
-                bg-gradient-to-b
-                from-[#CDB4DB]
-                via-[#FFC8DD]
-                to-[#A2D2FF]
-                border border-white/20
-                p-5
-            "
-        >
-            <h2 className="text-2xl font-semibold mb-5 drop-shadow text-gray-900">
-                Create New Country
-            </h2>
-
-            {/* Name */}
-            <div className="mb-4 flex flex-col">
-                <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900">Name</label>
-                <input
-                    id="name"
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    placeholder="Country name"
-                    className="
-                        bg-white/70 border border-gray-300 text-gray-900 text-sm rounded-xl
-                        px-3 py-2.5 focus:ring-2 focus:ring-[#FFC8DD] focus:border-[#FFC8DD]
-                        shadow-xs placeholder:text-gray-500 transition-all duration-300
-                    "
-                />
-                {formik.touched.name && formik.errors.name && (
-                    <div className="text-red-600 text-sm mt-1">{formik.errors.name}</div>
-                )}
+        <div className="flex flex-col flex-1 min-h-screen">
+            {/* Back link */}
+            <div className="w-full max-w-md pt-10 mx-auto">
+                <Link
+                    to="/"
+                    className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                    &#8592; Back to dashboard
+                </Link>
             </div>
 
-            {/* Code */}
-            <div className="mb-4 flex flex-col">
-                <label htmlFor="code" className="mb-2 text-sm font-medium text-gray-900">Code</label>
-                <input
-                    id="code"
-                    name="code"
-                    value={formik.values.code}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    placeholder="Country code"
-                    className="
-                        bg-white/70 border border-gray-300 text-gray-900 text-sm rounded-xl
-                        px-3 py-2.5 focus:ring-2 focus:ring-[#FFC8DD] focus:border-[#FFC8DD]
-                        shadow-xs placeholder:text-gray-500 transition-all duration-300
-                    "
-                />
-                {formik.touched.code && formik.errors.code && (
-                    <div className="text-red-600 text-sm mt-1">{formik.errors.code}</div>
-                )}
+            {/* Form container */}
+            <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+                <div className="mb-5">
+                    <h1 className="mb-2 font-semibold text-gray-800 text-title-md">
+                        Create New Country
+                    </h1>
+                    <p className="text-sm text-gray-500">
+                        Fill out the form to add a new country.
+                    </p>
+                </div>
+
+                <form onSubmit={formik.handleSubmit}>
+                    <div className="space-y-5">
+                        {/* Name */}
+                        <div>
+                            <Label>Name</Label>
+                            <Input
+                                name="name"
+                                placeholder="Country name"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.touched.name && formik.errors.name && (
+                                <p className="text-error-500 text-sm mt-1">{formik.errors.name}</p>
+                            )}
+                        </div>
+
+                        {/* Code */}
+                        <div>
+                            <Label>Code</Label>
+                            <Input
+                                name="code"
+                                placeholder="Country code"
+                                value={formik.values.code}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.touched.code && formik.errors.code && (
+                                <p className="text-error-500 text-sm mt-1">{formik.errors.code}</p>
+                            )}
+                        </div>
+
+                        {/* Slug */}
+                        <div>
+                            <Label>Slug</Label>
+                            <Input
+                                name="slug"
+                                placeholder="country-slug"
+                                value={formik.values.slug}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.touched.slug && formik.errors.slug && (
+                                <p className="text-error-500 text-sm mt-1">{formik.errors.slug}</p>
+                            )}
+                        </div>
+
+                        {/* Image */}
+                        <div>
+                            <Label>Upload Image</Label>
+                            <Input
+                                type="file"
+                                name="image"
+
+                                onChange={(e) => {
+                                    if (e.currentTarget.files && e.currentTarget.files[0]) {
+                                        formik.setFieldValue("image", e.currentTarget.files[0]);
+                                    }
+                                }}
+                            />
+                            {formik.touched.image && formik.errors.image && (
+                                <p className="text-error-500 text-sm mt-1">{formik.errors.image}</p>
+                            )}
+                        </div>
+
+                        {/* Optional Active Checkbox */}
+                        <div className="flex items-center gap-3">
+                            <Checkbox checked={isChecked} onChange={setIsChecked} />
+                            <span className="text-gray-700 text-sm">Active</span>
+                        </div>
+
+                        {/* Submit Button */}
+                        <div>
+                            <Button  className="w-full" size="sm">
+                                Create
+                            </Button>
+                        </div>
+                    </div>
+                </form>
             </div>
-
-            {/* Slug */}
-            <div className="mb-4 flex flex-col">
-                <label htmlFor="slug" className="mb-2 text-sm font-medium text-gray-900">Slug</label>
-                <input
-                    id="slug"
-                    name="slug"
-                    value={formik.values.slug}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    placeholder="country-slug"
-                    className="
-                        bg-white/70 border border-gray-300 text-gray-900 text-sm rounded-xl
-                        px-3 py-2.5 focus:ring-2 focus:ring-[#FFC8DD] focus:border-[#FFC8DD]
-                        shadow-xs placeholder:text-gray-500 transition-all duration-300
-                    "
-                />
-                {formik.touched.slug && formik.errors.slug && (
-                    <div className="text-red-600 text-sm mt-1">{formik.errors.slug}</div>
-                )}
-            </div>
-
-            {/* Image File */}
-            <div className="mb-4 flex flex-col">
-                <label htmlFor="image" className="mb-2 text-sm font-medium text-gray-900">Upload Image</label>
-                <input
-                    id="image"
-                    name="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={(event) => {
-                        if (event.currentTarget.files && event.currentTarget.files[0]) {
-                            formik.setFieldValue("image", event.currentTarget.files[0]);
-                        }
-                    }}
-                    onBlur={formik.handleBlur}
-
-                    className="
-            bg-white/70 border border-gray-300 text-gray-900 text-sm rounded-xl
-            px-3 py-2.5 focus:ring-2 focus:ring-[#FFC8DD] focus:border-[#FFC8DD]
-            shadow-xs placeholder:text-gray-500 transition-all duration-300
-        "
-                />
-                {formik.touched.image && formik.errors.image && (
-                    <div className="text-red-600 text-sm mt-1">{formik.errors.image}</div>
-                )}
-            </div>
-
-            <button
-                type="submit"
-                className="
-                    mt-auto px-4 py-2 rounded-xl font-medium
-                    bg-[#BDE0FE] hover:bg-[#A2D2FF] text-gray-900 shadow-md
-                    transition-all duration-300
-                "
-            >
-                Create
-            </button>
-        </form>
+        </div>
     );
 };
 

@@ -19,7 +19,7 @@ const ProfileCard:FC<ProfileCardProps> = ({profile}) => {
     border border-white/20
     p-5
 ">
-            <div className="w-40 h-40 rounded-full overflow-hidden mx-auto">
+            <div className="w-40 h-40 rounded-full overflow-hidden mx-auto ">
                 <img
                     src={`${API_ENV.API_BASE_URL}/images/${profile.image}`}
                     alt={profile.fullName}

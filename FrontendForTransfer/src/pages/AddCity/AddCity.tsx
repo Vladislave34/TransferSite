@@ -1,11 +1,12 @@
 import AddCityForm from "../../UI/AddCityForm/AddCityForm.tsx";
+import AuthLayout from "../../admin/pages/AuthPages/AuthPageLayout.tsx";
 
 
 const AddCity = () => {
     return (
-        <div className="h-screen w-screen bg-[#F6ECFA] flex justify-center items-center">
-            <AddCityForm />
-        </div>
+        <AuthLayout ><AddCityForm /></AuthLayout>
+
+
     );
 };
 

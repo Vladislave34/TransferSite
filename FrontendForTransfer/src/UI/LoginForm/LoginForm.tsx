@@ -1,128 +1,173 @@
-import {authApi} from "../../services/AuthService/AuthService.ts";
-import {useNavigate} from "react-router-dom";
-import {useFormik} from "formik";
-
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import type IUserLogin from "../../models/User/IUserLogin.ts";
-import {useEffect} from "react";
 
-import {useAppDispatch} from "../../hooks/redux.ts";
-import {loginSuccess} from "../../store/reducers/authSlice.ts";
+import { authApi } from "../../services/AuthService/AuthService";
+import type IUserLogin from "../../models/User/IUserLogin";
+
+import { useAppDispatch } from "../../hooks/redux";
+import { loginSuccess } from "../../store/reducers/authSlice";
+import {ChevronLeftIcon, EyeCloseIcon, EyeIcon} from "../../admin/icons";
+import Label from "../../admin/components/form/Label.tsx";
+import Input from "../../admin/components/form/input/InputField.tsx";
+import Checkbox from "../../admin/components/form/input/Checkbox.tsx";
+import Button from "../../admin/components/ui/button/Button.tsx";
+
 
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
-
-    const [login] = authApi.useLoginMutation();
     const navigate = useNavigate();
+    const [login] = authApi.useLoginMutation();
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+
     useEffect(() => {
-        if(localStorage.getItem("token")){
-            navigate('/Profile');
+        if (localStorage.getItem("token")) {
+            navigate("/Profile");
         }
-    }, []);
+    }, [navigate]);
+
     const formik = useFormik<IUserLogin>({
         initialValues: {
             email: "",
             password: "",
         },
         validationSchema: Yup.object({
-
-            email: Yup.string().email("Email is not correct").required("Email is required"),
-            password: Yup.string().required("Password is required").min(6, "Password is short"),
-
+            email: Yup.string()
+                .email("Email is not correct")
+                .required("Email is required"),
+            password: Yup.string()
+                .min(6, "Password is too short")
+                .required("Password is required"),
         }),
         onSubmit: async (values) => {
-
-            const jwt = await login(values)
-                .unwrap();
+            const jwt = await login(values).unwrap();
             dispatch(loginSuccess(jwt.token));
 
-            navigate('/Profile');
+            if (isChecked) {
+                localStorage.setItem("token", jwt.token);
+            }
 
-
-
-        }
+            navigate("/Profile");
+        },
     });
+
     return (
-        <form className="
-                overflow-y-auto
-                max-w-sm w-full
-                h-[350px]
-                flex flex-col
-                overflow-hidden
-                rounded-3xl
-                shadow-lg hover:shadow-xl
-                transition-all duration-300
-                bg-gradient-to-b
-                from-[#CDB4DB]
-                via-[#FFC8DD]
-                to-[#A2D2FF]
-                border border-white/20
-                p-5
-            "
-              onSubmit={formik.handleSubmit}
-        >
-            <h2 className="text-2xl font-semibold mb-5 drop-shadow text-gray-900">
-                Login
-            </h2>
-
-
-
-
-            <div className="mb-4 flex flex-col">
-                <label htmlFor="slug" className="mb-2 text-sm font-medium text-gray-900">Email</label>
-                <input
-                    id="email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    placeholder="Email"
-                    className="
-                        bg-white/70 border border-gray-300 text-gray-900 text-sm rounded-xl
-                        px-3 py-2.5 focus:ring-2 focus:ring-[#FFC8DD] focus:border-[#FFC8DD]
-                        shadow-xs placeholder:text-gray-500 transition-all duration-300
-                    "
-                />
-                {formik.touched.email && formik.errors.email && (
-                    <div className="text-red-600 text-sm mt-1">{formik.errors.email}</div>
-                )}
-            </div>
-            <div className="mb-4 flex flex-col">
-                <label htmlFor="slug" className="mb-2 text-sm font-medium text-gray-900">Password</label>
-                <input
-                    id="password"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    placeholder="Password"
-                    className="
-                        bg-white/70 border border-gray-300 text-gray-900 text-sm rounded-xl
-                        px-3 py-2.5 focus:ring-2 focus:ring-[#FFC8DD] focus:border-[#FFC8DD]
-                        shadow-xs placeholder:text-gray-500 transition-all duration-300
-                    "
-                />
-                {formik.touched.password && formik.errors.password && (
-                    <div className="text-red-600 text-sm mt-1">{formik.errors.password}</div>
-                )}
+        <div className="flex flex-col flex-1">
+            {/* Back */}
+            <div className="w-full max-w-md pt-10 mx-auto">
+                <Link
+                    to="/"
+                    className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
+                >
+                    <ChevronLeftIcon className="size-5" />
+                    Back to dashboard
+                </Link>
             </div>
 
+            {/* Content */}
+            <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+                <div className="mb-8">
+                    <h1 className="mb-2 font-semibold text-gray-800 text-title-md">
+                        Sign In
+                    </h1>
+                    <p className="text-sm text-gray-500">
+                        Enter your email and password to sign in!
+                    </p>
+                </div>
 
+                {/* Form */}
+                <form onSubmit={formik.handleSubmit} className="space-y-6">
+                    {/* Email */}
+                    <div>
+                        <Label>
+                            Email <span className="text-error-500">*</span>
+                        </Label>
+                        <Input
+                            type="email"
+                            name="email"
+                            placeholder="info@gmail.com"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
 
+                        />
+                        {formik.touched.email && formik.errors.email && (
+                            <p className="text-error-500 text-sm mt-1">
+                                {formik.errors.email}
+                            </p>
+                        )}
+                    </div>
 
+                    {/* Password */}
+                    <div>
+                        <Label>
+                            Password <span className="text-error-500">*</span>
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                placeholder="Enter your password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
 
-            <button
-                type="submit"
-                className="
-                    mt-auto px-4 py-2 rounded-xl font-medium
-                    bg-[#BDE0FE] hover:bg-[#A2D2FF] text-gray-900 shadow-md
-                    transition-all duration-300
-                "
-            >
-                Login
-            </button>
-        </form>
+                            />
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                            >
+                {showPassword ? (
+                    <EyeIcon className="size-5 fill-gray-500" />
+                ) : (
+                    <EyeCloseIcon className="size-5 fill-gray-500" />
+                )}
+              </span>
+                        </div>
+                        {formik.touched.password && formik.errors.password && (
+                            <p className="text-error-500 text-sm mt-1">
+                                {formik.errors.password}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Options */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Checkbox checked={isChecked} onChange={setIsChecked} />
+                            <span className="text-sm text-gray-700">
+                Keep me logged in
+              </span>
+                        </div>
+
+                        <Link
+                            to="/reset-password"
+                            className="text-sm text-brand-500 hover:text-brand-600"
+                        >
+                            Forgot password?
+                        </Link>
+                    </div>
+
+                    {/* Button */}
+                    <Button  className="w-full" size="sm">
+                        Sign In
+                    </Button>
+                </form>
+
+                {/* Footer */}
+                <p className="mt-5 text-sm text-center text-gray-700">
+                    Don&apos;t have an account?{" "}
+                    <Link
+                        to="/Register"
+                        className="text-brand-500 hover:text-brand-600"
+                    >
+                        Sign Up
+                    </Link>
+                </p>
+            </div>
+        </div>
     );
 };
 

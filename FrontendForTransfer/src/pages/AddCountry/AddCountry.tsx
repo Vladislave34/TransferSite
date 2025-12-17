@@ -1,10 +1,11 @@
 import CountryAddForm from "../../UI/CounryAddForm/countryAddForm.tsx";
+import AuthLayout from "../../admin/pages/AuthPages/AuthPageLayout.tsx";
 
 const AddCountry = () => {
     return (
-        <div className="h-screen w-screen bg-[#F6ECFA] flex justify-center items-center">
-            <CountryAddForm />
-        </div>
+        <AuthLayout><CountryAddForm /></AuthLayout>
+
+
     );
 };
 
