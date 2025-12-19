@@ -2,8 +2,8 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
 import PageMeta from "../../components/common/PageMeta";
 
-import AdminCountryList from "../../../components/AdminCountryList/adminCountryList.tsx";
-import AdminCityList from "../../../components/AdminCityList/AdminCityList.tsx";
+
+import BasicTableOne from "../../components/tables/BasicTables/BasicTableOne.tsx";
 
 export default function BasicTables() {
   return (
@@ -15,9 +15,7 @@ export default function BasicTables() {
       <PageBreadcrumb pageTitle="Basic Tables" />
       <div className="space-y-6">
         <ComponentCard title="Basic Table 1">
-
-            <AdminCountryList />
-            <AdminCityList />
+            <BasicTableOne />
         </ComponentCard>
       </div>
     </>

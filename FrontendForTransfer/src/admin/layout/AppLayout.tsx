@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
+import {useAppSelector} from "../../hooks/redux.ts";
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -28,6 +29,8 @@ const LayoutContent: React.FC = () => {
 };
 
 const AppLayout: React.FC = () => {
+    const role = useAppSelector(state=>state.authReducer.user)?.role;
+    if (!role?.includes("Admin")) return null;
   return (
     <SidebarProvider>
       <LayoutContent />

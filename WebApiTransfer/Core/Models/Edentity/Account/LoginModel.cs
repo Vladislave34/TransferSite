@@ -5,7 +5,7 @@ public class LoginModel
     /// <summary>
     /// Електронна пошта користувача
     /// </summary>
-    /// <example>admin@gmail.com</example>
+    /// <example>ostapchuk_vladyslav@gymnasia21.lutsk.ua</example>
     public string Email { get; set; } = null!;
     /// <summary>
     /// Пароль користувача

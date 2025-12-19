@@ -49,8 +49,25 @@ const navItems: NavItem[] = [
   {
     name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/admin/basic-tables", pro: false }],
+    subItems: [
+        { name: "Basic Tables", path: "/admin/basic-tables", pro: false }],
   },
+    {
+        name: "Country",
+        icon: <TableIcon />,
+        subItems: [
+            { name: "Country Tables", path: "/admin/country-list", pro: false },
+            { name: "Country Add", path: "/admin/AddCountry", pro: false },
+        ],
+    },
+    {
+        name: "City",
+        icon: <TableIcon />,
+        subItems: [
+            { name: "City Tables", path: "/admin/city-list", pro: false },
+            { name: "City Add", path: "/admin/AddCity", pro: false },
+        ],
+    },
   {
     name: "Pages",
     icon: <PageIcon />,

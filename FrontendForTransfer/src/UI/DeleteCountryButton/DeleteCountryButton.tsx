@@ -1,13 +1,13 @@
 import {countryApi} from "../../services/CountryService/CountryService.ts";
 import type {FC} from "react";
-import {useNavigate} from "react-router-dom";
+
 
 interface DeleteCountryButtonProps {
     id: number;
 }
 const DeleteCountryButton:FC<DeleteCountryButtonProps> = ({ id } ) => {
     const [deleteCountry] = countryApi.useDeleteCountryMutation();
-    const navigate = useNavigate();
+
     return (
 
         <div>
@@ -25,7 +25,7 @@ const DeleteCountryButton:FC<DeleteCountryButtonProps> = ({ id } ) => {
                     onClick={(e)=>{
                         e.stopPropagation()
                         deleteCountry(id);
-                        navigate("/Home")
+
                     }}
 
             >

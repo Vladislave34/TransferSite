@@ -90,12 +90,12 @@ const Header: FC = () => {
                                             <MenuItem
                                                 icon={<FiPlusCircle size={18} />}
                                                 text="Add City"
-                                                onClick={() => navigate("/AddCity")}
+                                                onClick={() => navigate("/admin/AddCity")}
                                             />
                                             <MenuItem
                                                 icon={<FiPlusCircle size={18} />}
                                                 text="Add Country"
-                                                onClick={() => navigate("/AddCountry")}
+                                                onClick={() => navigate("/admin/AddCountry")}
                                             />
                                             <Divider />
                                         </>

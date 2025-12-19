@@ -41,7 +41,7 @@ const AddCityForm = () => {
 
     return (
         <div className="flex flex-col flex-1 min-h-screen">
-            
+
 
             <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
                 <div className="mb-5">

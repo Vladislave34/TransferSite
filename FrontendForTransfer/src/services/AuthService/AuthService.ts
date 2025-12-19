@@ -3,6 +3,8 @@ import API_ENV from "../../env";
 import type IUserRegister from "../../models/User/IUserRegister.ts";
 import {serialize} from "object-to-formdata";
 import type IUserLogin from "../../models/User/IUserLogin.ts";
+import type IForgotPassword from "../../models/User/IForgotPassword.ts";
+import type {IResetPassword} from "../../models/User/IResetPassword.ts";
 
 
 export const authApi  = createApi({
@@ -23,6 +25,26 @@ export const authApi  = createApi({
                 }
 
             },
+            invalidatesTags: ["Auth"]
+        }),
+        ForgotPassword: build.mutation<void, IForgotPassword>({
+            query: (email)=> ({
+
+                    url: "ForgotPassword",
+                    method: "POST",
+                    body:email
+
+
+            }),
+
+
+        }),
+        ResetPassword: build.mutation<void, IResetPassword>({
+            query: (model)=> ({
+                url: "ResetPassword",
+                method: "POST",
+                body: model,
+            }),
             invalidatesTags: ["Auth"]
         }),
         Login: build.mutation<{token : string}, IUserLogin>({

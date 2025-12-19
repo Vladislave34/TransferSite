@@ -63,6 +63,36 @@ public class AccountController(UserManager<UserEntity> userManager,
         return Ok(new { token });
 
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
+    {
+        bool res = await userService.ForgotPasswordAsync(model);
+        if (res)
+            return Ok();
+        else
+            return BadRequest(new
+            {
+                Status = 400,
+                IsValid = false,
+                Errors = new { Email = "Користувача з такою поштою не існує" }
+            });
+    }
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+    {
+        var isTry =  await userService.ResetPasswordAsync(model);
+        if (!isTry)
+        {
+            return BadRequest(new
+            {
+                Status = 400,
+                IsValid = false,
+                Errors = new { Email = "Невірні дані для відновлення паролю" }
+            });
+        }
+        return Ok();
+    }
 
     [HttpGet]
     [Authorize]

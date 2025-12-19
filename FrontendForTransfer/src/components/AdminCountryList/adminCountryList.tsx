@@ -15,11 +15,13 @@ import DeleteCountryButton from "../../UI/DeleteCountryButton/DeleteCountryButto
 import EditCountryButton from "../../UI/EditCountryButton/EditCountryButton.tsx";
 
 
+
 const AdminCountryList = () => {
     const { data } = countryApi.useFetchAllCountriesQuery();
 
 
     return (
+
         <div className="w-full p-6">
             <div className="overflow-hidden rounded-2xl bg-[#0f172a] border border-white/10">
                 <Table className="text-sm text-gray-300">
@@ -91,6 +93,7 @@ const AdminCountryList = () => {
                 </Table>
             </div>
         </div>
+
     );
 };
 
