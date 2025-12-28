@@ -68,6 +68,14 @@ const navItems: NavItem[] = [
             { name: "City Add", path: "/admin/AddCity", pro: false },
         ],
     },
+    {
+        name: "Users",
+        icon: <TableIcon />,
+        subItems: [
+            { name: "UsersTable", path: "/admin/user-search", pro: false },
+
+        ],
+    },
   {
     name: "Pages",
     icon: <PageIcon />,

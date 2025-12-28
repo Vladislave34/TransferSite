@@ -5,8 +5,10 @@ import {googleApi} from "../services/GoogleAuthServise/GoogleAuthServise.ts";
 import {authApi} from "../services/AuthService/AuthService.ts";
 import {authorizedUserApi} from "../services/AuthorizedUser/AuthorizedUserService.ts";
 import authReducer from "../store/reducers/authSlice.ts";
+import paginationReducer from "../store/reducers/paginationSlice.ts";
 
 const rootReducer = combineReducers({
+    paginationReducer,
     authReducer,
     [countryApi.reducerPath]: countryApi.reducer,
     [cityApi.reducerPath]: cityApi.reducer,

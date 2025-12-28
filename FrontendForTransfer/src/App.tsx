@@ -39,6 +39,8 @@ import AdminCountryListPage from "./pages/AdminPage/AdminCountryListPage.tsx";
 import AdminCityListPage from "./pages/AdminPage/AdminCityListPage.tsx";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage.tsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage.tsx";
+
+import AdminUsersPage from "./pages/AdminPage/AdminUsersPage.tsx";
 // import {useAppSelector} from "./hooks/redux.ts";
 
 
@@ -83,6 +85,7 @@ function App() {
 
                             <Route path="country-list" element={<AdminCountryListPage />} />
                             <Route path="city-list" element={<AdminCityListPage />} />
+                            <Route path="user-search" element={<AdminUsersPage />} />
 
                             {/* Others Page */}
                             <Route path="profile" element={<UserProfiles />} />

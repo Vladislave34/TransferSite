@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Bogus;
 using Core.Interfaces;
 using Core.Models.Edentity.Account;
 using Core.Services;
@@ -183,6 +184,27 @@ using (var scoped = app.Services.CreateScope())
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+        int countUsers = 100;
+        var faker = new Faker("uk");
+        for (int i = 0; i < countUsers; i++)
+        {
+            var firstName = faker.Name.FirstName();
+            var lastName = faker.Name.LastName();
+            var email = faker.Internet.Email(firstName, lastName);
+            var user = new UserEntity
+            {
+                UserName = email,
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                Image = "default.jpg"
+            };
+            var userResult = await userManager.CreateAsync(user, "User123");
+            if (userResult.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "User");
+            }
         }
     }
     await seeder.SeedAsync();
