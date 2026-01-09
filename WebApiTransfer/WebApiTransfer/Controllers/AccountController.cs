@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Core.Interfaces;
+using Core.Models.Edentity;
 using Core.Models.Edentity.Account;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,9 @@ namespace WebApiTransfer.Controllers;
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class AccountController(UserManager<UserEntity> userManager,
-    IJwtTokenService jwtTokenService, IUserService userService, IImageService imageService, RoleManager<RoleEntity> roleManager) : ControllerBase
+    IJwtTokenService jwtTokenService, IUserService userService,
+    IImageService imageService, RoleManager<RoleEntity> roleManager,
+    IAccountService accountService) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
@@ -123,5 +126,23 @@ public class AccountController(UserManager<UserEntity> userManager,
             ts.Milliseconds / 10);
         Console.WriteLine("-----------Elapsed Time------------: " + elapsedTime);
         return Ok(result);
+    }
+    [HttpPost]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequestModel model)
+    {
+        var result = await accountService.LoginByGoogle(model.IdToken);
+        if (string.IsNullOrEmpty(result))
+        {
+            return BadRequest(new
+            {
+                Status = 400,
+                IsValid = false,
+                Errors = new { Email = "Помилка реєстрації" }
+            });
+        }
+        return Ok(new
+        {
+            Token = result
+        });
     }
 }

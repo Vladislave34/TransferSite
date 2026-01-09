@@ -9,6 +9,9 @@ import {ChevronLeftIcon, EyeCloseIcon, EyeIcon} from "../../admin/icons";
 import Label from "../../admin/components/form/Label";
 import Input from "../../admin/components/form/input/InputField.tsx";
 import Checkbox from "../../admin/components/form/input/Checkbox.tsx";
+import {loginSuccess} from "../../store/reducers/authSlice.ts";
+import {useAppDispatch} from "../../hooks/redux.ts";
+
 
 // import { EyeCloseIcon, EyeIcon, ChevronLeftIcon } from "../../icons";
 // import Label from "../form/Label";
@@ -16,6 +19,7 @@ import Checkbox from "../../admin/components/form/input/Checkbox.tsx";
 // import Checkbox from "../form/input/Checkbox";
 
 const RegisterForm = () => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [register] = authApi.useRegisterMutation();
 
@@ -42,7 +46,8 @@ const RegisterForm = () => {
         }),
         onSubmit: async (values) => {
             const jwt = await register(values).unwrap();
-            localStorage.setItem("token", jwt.token);
+
+            dispatch(loginSuccess(jwt.token));
             navigate("/");
         },
     });

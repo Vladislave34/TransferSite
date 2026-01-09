@@ -17,6 +17,8 @@ import {
 import { RiUserSettingsLine } from "react-icons/ri";
 import {ThemeToggleButton} from "../../admin/components/common/ThemeToggleButton.tsx";
 import NotificationDropdown from "../../admin/components/header/NotificationDropdown.tsx";
+import {MdOutlineShoppingCart} from "react-icons/md";
+import {IoCarSportOutline} from "react-icons/io5";
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
@@ -51,8 +53,18 @@ const Header: FC = () => {
 
                 {/* Right */}
                 <div className="flex items-center gap-3">
+                    <div
+                        className="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                        onClick={()=>{
+                            navigate("/Transportation");
+                        }}
+                    >
+                        <IoCarSportOutline size={30} />
+                    </div>
+
                     <ThemeToggleButton />
                     <NotificationDropdown />
+
 
                     {/* User */}
                     {user ? (
@@ -78,6 +90,11 @@ const Header: FC = () => {
                                         icon={<CgProfile size={18} />}
                                         text="Profile"
                                         onClick={() => navigate("/Profile")}
+                                    />
+                                    <MenuItem
+                                        icon={<MdOutlineShoppingCart size={18} />}
+                                        text="Cart"
+                                        onClick={() => navigate("/Cart")}
                                     />
 
                                     {isAdmin && (

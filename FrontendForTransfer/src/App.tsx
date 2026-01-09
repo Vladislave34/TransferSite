@@ -41,6 +41,8 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage.ts
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage.tsx";
 
 import AdminUsersPage from "./pages/AdminPage/AdminUsersPage.tsx";
+import Transportations from "./pages/Transportations/Transportations.tsx";
+import Cart from "./pages/Cart/Cart.tsx";
 // import {useAppSelector} from "./hooks/redux.ts";
 
 
@@ -77,6 +79,8 @@ function App() {
                         <Route path="Login" element={<LoginPage />} />
                         <Route path="Profile" element={<Profile />} />
                         <Route path="AdminPage" element={<AdminPage />} />
+                        <Route path="Transportation" element={<Transportations />} />
+                        <Route path="Cart" element={<Cart />} />
 
                     </Route>
 

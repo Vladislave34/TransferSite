@@ -32,7 +32,7 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
     })
     .AddEntityFrameworkStores<AppDbTransferContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddScoped<GoogleAuthService>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -102,7 +102,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<DbContextSeeder>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITransportationService, TransportationService>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
@@ -118,7 +120,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowTwoDomains", policy =>
     {
         policy.WithOrigins("http://localhost:5173", 
-                "http://mytransfersite12345.somee.com")
+                "http://tranferorg.somee.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials(); // якщо потрібно передавати cookies/token

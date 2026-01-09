@@ -13,6 +13,7 @@ import Label from "../../admin/components/form/Label.tsx";
 import Input from "../../admin/components/form/input/InputField.tsx";
 import Checkbox from "../../admin/components/form/input/Checkbox.tsx";
 import Button from "../../admin/components/ui/button/Button.tsx";
+import LogButton from "../LogButton/LogButton.tsx";
 
 
 
@@ -166,7 +167,12 @@ const LoginForm = () => {
                         Sign Up
                     </Link>
                 </p>
+                <div className="flex justify-center mt-4">
+                    <LogButton />
+                </div>
+
             </div>
+
         </div>
     );
 };

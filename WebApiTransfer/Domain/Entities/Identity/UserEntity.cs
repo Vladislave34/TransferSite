@@ -14,5 +14,7 @@ public class UserEntity : IdentityUser<int>
     
     public ICollection<UserRoleEntity> UserRoles { get; set; } = null!;
 
-    
+    public ICollection<CartEntity> Carts { get; set; } = null!;
+
+
 }
