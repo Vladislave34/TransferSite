@@ -31,12 +31,12 @@ const TransportationConfirmModal: FC<Props> = ({
                     onChange={(e) => onChangeAmount(e.target.value)}
                     placeholder="Введіть кількість"
                     className="
-            w-full rounded-xl border px-4 py-2
-            border-gray-300 dark:border-gray-700
-            bg-white dark:bg-gray-800
-            text-gray-800 dark:text-white
-            focus:outline-none focus:ring-2 focus:ring-indigo-500
-          "
+                        w-full rounded-xl border px-4 py-2
+                        border-gray-300 dark:border-gray-700
+                        bg-white dark:bg-gray-800
+                        text-gray-800 dark:text-white
+                        focus:outline-none focus:ring-2 focus:ring-indigo-500
+                      "
                 />
 
                 <button
