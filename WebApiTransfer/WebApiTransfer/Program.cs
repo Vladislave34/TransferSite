@@ -117,19 +117,18 @@ builder.Services.AddMvc(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowTwoDomains", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", 
-                "http://tranferorg.somee.com")
+        policy
+            .AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // якщо потрібно передавати cookies/token
+            .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowTwoDomains");
+app.UseCors("AllowAll");
 
 
 
