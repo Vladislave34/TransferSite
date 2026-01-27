@@ -1,5 +1,9 @@
 version: "3.9"
 
+networks:
+  transfer_net:
+    driver: bridge
+
 services:
   db:
     image: postgres:18.1
@@ -13,7 +17,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - /data/transfer/postgres:/var/lib/postgresql
-
+    networks:
+      - transfer_net
+    
   server:
     build: ./WebApiTransfer
     container_name: transfer_api
@@ -26,12 +32,16 @@ services:
       - "5898:8080"
     depends_on:
       - db
+    networks:
+      - transfer_net
 
   front:
     build: 
-      context: ./my-transfer-ts
+      context: ./FrontendForTransfer
     container_name: react_front
     depends_on:
       - server
     ports:
       - "3987:80"
+    networks:
+      - transfer_net
