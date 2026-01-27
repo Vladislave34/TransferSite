@@ -21,7 +21,7 @@ services:
       - /data/transfer/images:/app/images
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: Host=db;Database=mydb;Port:5022;Username=ivan;Password=marko123halosh
+      ConnectionStrings__DefaultConnection: Host=db;Database=mydb;Port=5022;Username=ivan;Password=marko123halosh
     ports:
       - "5898:8080"
     depends_on:
