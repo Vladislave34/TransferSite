@@ -7,7 +7,7 @@ networks:
 services:
   db:
     image: postgres:18.1
-    container_name: db
+    container_name: postgres_db
     restart: always
     ports:
       - "5022:5432"
@@ -27,7 +27,7 @@ services:
       - /data/transfer/images:/app/images
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: Host=db;Database=mydb;Port=5022;Username=ivan;Password=marko123halosh
+      ConnectionStrings__DefaultConnection: Host=192.168.64.3;Database=mydb;Port=5022;Username=ivan;Password=marko123halosh
     ports:
       - "5898:8080"
     depends_on:
