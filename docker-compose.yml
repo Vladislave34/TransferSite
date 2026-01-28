@@ -38,6 +38,8 @@ services:
   front:
     build: 
       context: ./FrontendForTransfer
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
     container_name: react_front
     depends_on:
       - server
