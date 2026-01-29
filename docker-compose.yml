@@ -21,7 +21,7 @@ services:
       - transfer_net
     
   server:
-    build: ./WebApiTransfer
+    image: v1dkos/transfer-react:latest
     container_name: transfer_api
     volumes:
       - /data/transfer/images:/app/images
