@@ -21,7 +21,7 @@ services:
       - transfer_net
     
   server:
-    image: v1dkos/transfer-react:latest
+    image: v1dkos/transfer-api:latest
     container_name: transfer_api
     volumes:
       - /data/transfer/images:/app/images
@@ -36,10 +36,7 @@ services:
       - transfer_net
 
   front:
-    build: 
-      context: ./FrontendForTransfer
-      args:
-        REACT_APP_API_URL: ${REACT_APP_API_URL}
+    image: v1dkos/transfer-react:latest
     container_name: react_front
     depends_on:
       - server

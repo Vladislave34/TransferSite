@@ -3,8 +3,8 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # ⬇️ ДОДАЄМО
-ARG REACT_APP_API_URL
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 COPY package*.json ./
 RUN npm install
