@@ -1,9 +1,7 @@
 #!/bin/bash
 set -e
 
-# --------- Enable buildx (якщо ще не створений) ----------
-docker buildx create --use --name multiarch-builder || true
-docker buildx inspect --bootstrap
+
 
 # ================= FRONTEND =================
 cd FrontendForTransfer
