@@ -16,6 +16,7 @@ const CountryDetails = () => {
         console.log(id);
         console.log(state);
     })
+    
 
     const isAdmin =
         user?.role &&
@@ -32,6 +33,8 @@ const CountryDetails = () => {
                 </>
 
             )}
+
+
 
         </div>
     );
